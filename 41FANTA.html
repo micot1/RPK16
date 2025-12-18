@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Academy Knights Registry</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&family=Cinzel:wght@400;700&display=swap');
+
+        body {
+            background: #0a0b10;
+            color: #e0e6ed;
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 50px 20px;
+            background-image: linear-gradient(rgba(10, 11, 16, 0.85), rgba(10, 11, 16, 0.85)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2000'); 
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+            text-align: center;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(400px, 550px));
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .status-window {
+            background: rgba(20, 25, 35, 0.75); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-top: 3px solid #d4af37;
+            border-radius: 8px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .status-window:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: #d4af37;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+            background: rgba(30, 35, 50, 0.95);
+            z-index: 10;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .status-title { font-family: 'Cinzel', serif; font-size: 11px; color: #d4af37; letter-spacing: 1.5px; }
+        .rank { font-family: 'Cinzel', serif; font-size: 22px; color: #fff; font-weight: bold; }
+        .main-content { display: flex; gap: 20px; }
+
+        .img-box {
+            width: 200px;
+            height: 260px;
+            flex-shrink: 0;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: #000;
+        }
+
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .info-box { flex-grow: 1; }
+        .char-name { font-size: 22px; font-weight: bold; color: #fff; margin-bottom: 12px; border-left: 4px solid #d4af37; padding-left: 12px; }
+        .stat-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
+        .label { color: #9aaabb; font-weight: 300; }
+        .value { color: #d4af37; font-weight: 500; }
+
+        .description {
+            margin-top: 18px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #d1d1d1;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 75px;
+        }
+
+        .info-tag { 
+            color: #ffffff; 
+            font-weight: bold; 
+            display: block; 
+            margin-bottom: 8px; 
+            font-size: 14px;
+            border-bottom: 1px solid #d4af37;
+            width: fit-content;
+            padding-bottom: 2px;
+        }
+
+        @media (max-width: 950px) { .status-grid { grid-template-columns: 1fr; width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <h1>엘리어스 검술아카데미 교수,학생 프로필</h1>
+
+    <div class="status-grid">
+        
+        <div class="status-window">
+            <div class="status-header">
+                <span class="status-title">REGISTRY_UNIT_001</span>
+                <span class="rank">2학년</span>
+            </div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(1).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">세이야 브론델</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">22세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">A등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">성검 지기스문트 (Sigismund)</span></div>
+                </div>
+            </div>
+            <div class="description">
+                <span class="info-tag">[기본사항]</span>
+                한손검을 다루는 브론델 가문의 차녀이자 가문의 의지를 실질적으로 집행하는 존재. 
+            </div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header">
+                <span class="status-title">REGISTRY_UNIT_002</span>
+                <span class="rank">1학년</span>
+            </div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(2).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">헤르나 폰 플라베르크</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">21세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">B+등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">사일런트 컨뎀 (Silent Condemn)</span></div>
+                </div>
+            </div>
+            <div class="description">
+                <span class="info-tag">[기본사항]</span>
+                할버드를 다루는 폴라베르크 가문의 장녀. 선천적 재능은 부족하지만, 끊임없는 수련으로 실력을 쌓아 상위권을 노리고있음.
+            </div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_003</span><span class="rank">3학년</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(3).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">로제트 레드필드</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">24세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">A+등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">성단의 일섬 루멘 (Lumen Flash)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>카타나를 다루는 평민출신. 루벨과 시아나의 친구이며 유급을 하여 또래보다 한 살 많은 아카데미 3학년.</div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_004</span><span class="rank">4학년</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(4).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">엘리시아 루벨</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">24세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">S+등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">성문검 센텐시아 (Sententia)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>레이피어를 다루는 루벨 가문의 장녀. 평민인 로제트를 편견 없이 대하는 강인하고 올곧은 아카데미 학생회장.</div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_005</span><span class="rank">4학년</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(7).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">시아나 에버로즈</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">24세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">S등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value"> 블랙 레퀴엠 (Black Requiem)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>낫을 다루는 에버로즈 가문의 막내딸. 평소엔 밝지만 전투에선 성정이 뒤바뀌는 전투광.</div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_006</span><span class="rank">3학년</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(1).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">시라유키 라미</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">23세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">A+등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">無名雙刃 (무명쌍인)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>쌍수단검을 다루는 무녀 가문의 당주. 유라진에서 아카데미에 유학 온 조용하고 단아한 성격</div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_007</span><span class="rank">3학년</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(2).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">아마기 카에데</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">23세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">A+등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">眞誓弓 (진서궁)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>활을 다루며 라미와 함께 유라진에서 전학 온 정체불명의 학생. 늘 그녀 곁을 지키며 털털한 말투를 쓰는 인물.</div>
+        </div>
+
+        <div class="status-window">
+            <div class="status-header"><span class="status-title">REGISTRY_UNIT_008</span><span class="rank">교수</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(3).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">세리안 루비에르</div>
+                    <div class="stat-row"><span class="label">AGE</span><span class="value">33세</span></div>
+                    <div class="stat-row"><span class="label">GRADE</span><span class="value">SS등급</span></div>
+                    <div class="stat-row"><span class="label">WEAPON</span><span class="value">팔랑스 & 헤일로 (Phalanx & Halo)</span></div>
+                </div>
+            </div>
+            <div class="description"><span class="info-tag">[기본사항]</span>검과 방패를 다루는 아카데미의 교사. 붉은 머리가 인상적이나 분노에 휩싸이면 앞뒤를 가리지 않는다.</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
