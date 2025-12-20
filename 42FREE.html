@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Academy Knights Registry - Full Deluxe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&family=Cinzel:wght@400;700&display=swap');
+
+        :root {
+            --color-1st: #4db8ff; --color-2nd: #33ff99; --color-3rd: #ff4d4d;
+            --color-4th: #d4af37; --color-prof: #e0e0e0; --gold-light: #f0c279;
+        }
+
+        body {
+            background: #0a0b10; color: #e0e6ed; font-family: 'Noto Sans KR', sans-serif;
+            margin: 0; padding: 50px 20px; display: flex; flex-direction: column;
+            align-items: center; min-height: 100vh;
+        }
+
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(10, 11, 16, 0.9), rgba(10, 11, 16, 0.95)), 
+                              url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2000');
+            background-size: cover; background-attachment: fixed; z-index: -2;
+        }
+
+        h1 { font-family: 'Cinzel', serif; color: #d4af37; font-size: 2.5rem; letter-spacing: 8px; text-align: center; margin-bottom: 50px; text-shadow: 0 0 20px rgba(212,175,55,0.3); }
+
+        .status-grid {
+            display: grid; grid-template-columns: repeat(2, minmax(400px, 550px));
+            gap: 30px; justify-content: center; width: 100%; max-width: 1200px;
+        }
+
+        .status-window {
+            background: rgba(15, 25, 35, 0.85); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px;
+            padding: 22px; position: relative; transition: 0.4s;
+            cursor: pointer; display: flex; flex-direction: column;
+        }
+
+        .status-window[data-rank="1학년"] { --rank-color: var(--color-1st); }
+        .status-window[data-rank="2학년"] { --rank-color: var(--color-2nd); }
+        .status-window[data-rank="3학년"] { --rank-color: var(--color-3rd); }
+        .status-window[data-rank="4학년"] { --rank-color: var(--color-4th); }
+        .status-window[data-rank="교수"] { --rank-color: var(--color-prof); }
+
+        .status-window::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--rank-color); box-shadow: 0 0 10px var(--rank-color);
+        }
+
+        .status-window:hover { transform: translateY(-5px); border-color: var(--rank-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        .status-top-area { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .top-left-rank { font-family: 'Cinzel', serif; color: var(--rank-color); font-weight: bold; font-size: 16px; }
+        .top-right-stars { color: var(--gold-light); font-size: 12px; letter-spacing: 2px; }
+
+        .main-content { display: flex; gap: 15px; margin-bottom: 15px; }
+        
+        .img-box { width: 170px; height: 240px; overflow: hidden; background: #000; order: 1; border: 1px solid rgba(255,255,255,0.1); }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.8); transition: 0.5s; }
+        .status-window:hover img { filter: grayscale(0); transform: scale(1.05); }
+
+        .info-box { flex-grow: 1; order: 2; display: flex; flex-direction: column; }
+        .char-name { font-size: 19px; font-weight: bold; border-left: 3px solid var(--rank-color); padding-left: 10px; margin-bottom: 10px; color: #fff; }
+        .stat-group { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 4px; }
+        .stat-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 2px; }
+        .label { color: #8a9aab; font-weight: 500; }
+
+        .bottom-base-info {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: auto;
+        }
+        .base-tag {
+            display: inline-block;
+            color: var(--rank-color);
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            border: 1px solid var(--rank-color);
+            padding: 1px 6px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.02);
+        }
+        .base-text {
+            font-size: 12.5px;
+            color: #bdc3c7;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        #detail-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 7, 12, 0.95); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #0f111a; width: 90%; max-width: 600px;
+            border: 2px solid var(--m-color); 
+            border-radius: 12px; padding: 40px; position: relative;
+            animation: modalSlide 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 30px; cursor: pointer; color: #555; transition: 0.3s; }
+        .modal-header { border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 25px; padding-bottom: 15px; }
+        #modal-name { font-family: 'Cinzel', serif; font-size: 32px; margin: 0; color: var(--m-color); }
+        .modal-story { line-height: 1.8; color: #d1d9e0; font-size: 15px; white-space: pre-wrap; }
+
+        @media (max-width: 950px) { .status-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <h1>ELIAS KNIGHTS ACADEMY CODEX</h1>
+
+    <div class="status-grid">
+        <div class="status-window" data-rank="1학년" onclick="showDetail('헤르나 폰 플라베르크 (Herena von Plaverk)', '1학년', '할버드를 다루는 폴라베르크 가문의 장녀. 과묵하고 자기절제적이며 재능은 평범하나 가문의 명예를 잇기 위해 실패가 허락되지 않는 장녀. 선천적 재능은 부족하지만, 끊임없는 수련으로 실력을 쌓는 노력파. 하루 훈련량은 학년 최상위권이며 스스로를 혹사하는 타입.')">
+            <div class="status-top-area"><span class="top-left-rank">1학년</span><span class="top-right-stars">★ ★ ★ ☆ ☆</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(2).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">헤르나 폰 플라베르크</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>21세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>B+등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>사일런트 컨뎀 (Silent Condemn)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text">눈에 띄진 않지만 절대 무너지지 않는 학생</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="2학년" onclick="showDetail('세이야 브론델 (Seiya Brondel)', '2학년', '한손검을 다루는 브론델 가문의 차녀. 가문의 의지를 실질적으로 집행하는 존재. 장녀가 가문을 대표하는 상징이라면, 세이야는 실질적인 집행자. 정치·외교엔 관심 없고 “검으로 해결하는 쪽”을 선택한다.')">
+            <div class="status-top-area"><span class="top-left-rank">2학년</span><span class="top-right-stars">★ ★ ★ ★ ☆</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(1).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">세이야 브론델</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>22세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>A등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>지기스문트 (Sigismund)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text">결과로 자신의 가치를 증명하는 존재</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="3학년" onclick="showDetail('시라유키 라미 (Shirayuki Lami)', '3학년', '쌍수단검을 다루는 음양 국가 유라진에서 전해 내려오는 고대 의식을 계승한 자이자 카미츠쿠니 가문의 최연소 당주. 유라진에서 전해지던 고대 의식의 일부가 소실되며 그 흔적이 검술 아카데미에 남아 있다는 사실을 알게됨. 라미는 그 단서를 쫓아 전학생 신분으로 아카데미에 합류')">
+            <div class="status-top-area"><span class="top-left-rank">3학년</span><span class="top-right-stars">★ ★ ★ ★ ☆</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(1).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">시라유키 라미</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>23세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>A+등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>무명쌍인 (無名雙刃)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text">감정을 드러내지 않고 검을 휘두르는 의식 같은 학생</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="3학년" onclick="showDetail('아마기 카에데 (Amagi Kaede)', '3학년', '활을 다루는 무사이자 라미의 움직임을 뒤에서 받치는 그림자. 털털하고 직설적인 화법을 사용하며 공식적으로는 학생이지만 실질적으로는 라미 전속 호위. 실질적인 목적은 단 하나— 라미가 목표를 찾을 때까지 호위 하는 것.')">
+            <div class="status-top-area"><span class="top-left-rank">3학년</span><span class="top-right-stars">★ ★ ★ ★ ☆</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(2).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">아마기 카에데</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>23세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>A+등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>진서궁 (眞誓弓)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>	
+                <div class="base-text">전투가 시작되기 전에 이미 전황을 끝내놓는 호위무사</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="3학년" onclick="showDetail('로제트 레드필드 (Rosette Redfield)', '3학년', '카타나을 다루는 평민 출신의 학생. 차별을 실력으로 증명해낸 개척자. 루벨과 시아나의 친구이며 필기점수 미달로 유급을 하여 또래보다 한 살 많음. 귀족 중심 아카데미에서 실력 하나로 올라온 존재.')">
+            <div class="status-top-area"><span class="top-left-rank">3학년</span><span class="top-right-stars">★ ★ ★ ★ ☆</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(3).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">로제트 레드필드</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>24세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>A-등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>일섬 루멘 (Lumen Flash)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text">대련장과 훈련 설비의 파손 보고서에 가장 많이 등장하여 루벨,시아나와 자연히 친해진 존재.</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="4학년" onclick="showDetail('엘리시아 루벨 (Elysia Rubel)', '4학년', '레이피어를 다루는 루벨 공작가의 장녀이자 아카데미를 통솔하는 학생회장. 제국 정치·군사 양대 핵심 루벨 공작가의 외동딸이며 학생이지만 사실상 아카데미의 상징. 교수진조차 그녀의 판단을 존중한다.')">
+            <div class="status-top-area"><span class="top-left-rank">4학년</span><span class="top-right-stars">★ ★ ★ ★ ★</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(4).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">엘리시아 루벨</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>24세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>S+등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>센텐시아 (Sententia)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text">대련보다 면담이 더 긴장된다는 말이 돌정도로 냉정한 학생회장.</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="4학년" onclick="showDetail('시아나 에버로즈 (Siana Everose)', '4학년', '대낫을 다루는 에버로즈 가문의 후계자이자 아카데미의 부회장. 죽음과 장례 의식을 담당하던 백작가의 막내딸이며 전투 중 들리는 ‘소리’는 환청인지, 능력인지 불명.')">
+            <div class="status-top-area"><span class="top-left-rank">4학년</span><span class="top-right-stars">★ ★ ★ ★ ★</span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR%20(7).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">시아나 에버로즈</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>24세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>S등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>블랙 레퀴엠 (Black Requiem)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 평판</div>
+                <div class="base-text"> 평소엔 밝지만, 전투에 들어가면 성격이 완전히 바뀌는 전투광.</div>
+            </div>
+        </div>
+
+        <div class="status-window" data-rank="교수" onclick="showDetail('세리안 루비에르 (Serian Rubiére)', '교수', '성검과 방패를 다루는 제국의 영웅이자 아카데미의 무술 총책임 교수. 전쟁에서 살아남아 교수로 복귀 평민출신이며 학생들에게는 엄격하지만, 목숨이 걸린 순간엔 누구보다 앞에 선다.')">
+            <div class="status-top-area"><span class="top-left-rank">교수</span><span class="top-right-stars">★ ★ ★ ★ ★ ★ </span></div>
+            <div class="main-content">
+                <div class="img-box"><img src="https://raw.githubusercontent.com/micot1/RPK16/refs/heads/main/41PR2%20(3).jpg"></div>
+                <div class="info-box">
+                    <div class="char-name">세리안 루비에르</div>
+                    <div class="stat-group">
+                        <div class="stat-row"><span class="label">AGE</span><span>33세</span></div>
+                        <div class="stat-row"><span class="label">GRADE</span><span>SS등급</span></div>
+                        <div class="stat-row"><span class="label">WEAPON</span><span>팔랑스 & 헤일로 (Phalanx & Halo)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-base-info">
+                <div class="base-tag">아카데미 내 위상</div>
+                <div class="base-text">아카데미의 기준점이자 넘을 수 없는 전력으로 평가받음</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detail-modal" onclick="closeModal()">
+        <div class="modal-content" id="modal-container" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="modal-name">Name</h2>
+                <div id="modal-rank-display">RANK</div>
+            </div>
+            <div class="modal-story" id="modal-story">Story content...</div>
+        </div>
+    </div>
+
+    <script>
+        function showDetail(name, rank, story) {
+            const modal = document.getElementById('detail-modal');
+            const container = document.getElementById('modal-container');
+            let color = "#fff";
+            if(rank === "1학년") color = "#4db8ff";
+            else if(rank === "2학년") color = "#33ff99";
+            else if(rank === "3학년") color = "#ff4d4d";
+            else if(rank === "4학년") color = "#d4af37";
+            else if(rank === "교수") color = "#e0e0e0";
+
+            container.style.setProperty('--m-color', color);
+            document.getElementById('modal-name').innerText = name;
+            document.getElementById('modal-rank-display').innerText = rank + " - PRIVATE RECORD";
+            document.getElementById('modal-story').innerText = story;
+            modal.style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('detail-modal').style.display = 'none'; }
+    </script>
+</body>
+</html>
